@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Simple ballots counter</title>
+
+	<link rel="stylesheet" href="lib/bootstrap/bootstrap.min.css">
+	<script src="lib/jquery/jquery.min.js"></script>
+	<script src="lib/bootstrap/bootstrap.min.js"></script>
+	<script src="lib/angular/angular.min.js"></script>
+	<script src="js/data.js"></script>
+	<script src="js/main.js"></script>
+	<style>
+		.candidate{
+			margin-top: 10px;
+		}
+		.candidate button{
+			width: 100px;
+		}
+	</style>
+
+</head>
+<body>
+	<div class="container">
+	
+
+		<div ng-app="appCount">
+	    	<div ng-controller="countCtrl">
+				<h1>Подсчет итогов <button class="btn pull-right" ng-click="restartAll()">Restart</button>
+				<button class="btn pull-right" ng-click="loadData()" style="margin-right: 15px;" >Load</button>
+				</h1>
+				
+			<!-- Кандидаты в 4 колонки -->
+	    	<div class="row">
+				<div class="col-md-3">
+					<div ng-repeat="candidate in candidates" class="candidate" ng-switch on="$index < 5">
+						<div ng-switch-when="true">
+							<button type="button" class="btn" ng-class="{'btn-default': !candidate.selected, 'btn-primary': candidate.selected}" ng-click="candidate.selected = !candidate.selected">{{candidate.name}}</button>
+							<span>{{candidate.count}}</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div ng-repeat="candidate in candidates" class="candidate" ng-switch on="$index > 4 && $index < 10">
+						<div ng-switch-when="true">
+							<button type="button" class="btn" ng-class="{'btn-default': !candidate.selected, 'btn-primary': candidate.selected}" ng-click="candidate.selected = !candidate.selected">{{candidate.name}}</button>
+							<span>{{candidate.count}}</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div ng-repeat="candidate in candidates" class="candidate" ng-switch on="$index > 9 && $index < 15">
+						<div ng-switch-when="true">
+							<button type="button" class="btn" ng-class="{'btn-default': !candidate.selected, 'btn-primary': candidate.selected}" ng-click="candidate.selected = !candidate.selected">{{candidate.name}}</button>
+							<span>{{candidate.count}}</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div ng-repeat="candidate in candidates" class="candidate" ng-switch on="$index > 14">
+						<div ng-switch-when="true">
+							<button type="button" class="btn" ng-class="{'btn-default': !candidate.selected, 'btn-primary': candidate.selected}" ng-click="candidate.selected = !candidate.selected">{{candidate.name}}</button>
+							<span>{{candidate.count}}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<button type="button" class="btn btn-lg btn-success" ng-click="addBallot()" ng-hide="current.edit">Готово</button> 
+			<h4 ng-show="current.edit" class="text-danger">Редактирование бюллетеня {{current.edit_id}}</h4>
+			<button type="button" class="btn btn-success" ng-click="updateBallot()" ng-show="current.edit">Сохранить</button>
+			<button type="button" class="btn-link btn-success" ng-click="cancelUpdate()" ng-show="current.edit">Отмена</button> 
+			<span>Всего бюллетеней: {{ballots.length}}.</span> <span>Всего галочек: {{current.totalTicks}}.</span>
+			
+
+			<h3>Введенные бюллетени</h3>
+			<!-- Последние 10 бюллетеней -->
+			<div ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]">
+				{{ ballots[ballots.length - i].id }}. <span ng-repeat="vote in ballots[ballots.length - i].votes"><span ng-show="!$first"> - </span>{{vote.name}}</span>
+				<button type="button" class="btn btn-xs btn-danger" ng-click="deleteBallot(ballots[ballots.length - i].id)" ng-hide="current.edit" ng-if="ballots[ballots.length - i].id">Удалить</button>
+				<button type="button" class="btn btn-xs btn-warning"ng-click="editBallot(ballots[ballots.length - i].id)" ng-hide="current.edit" ng-if="ballots[ballots.length - i].id">Изменить</button>
+				<span ng-hide="ballots[ballots.length - i].editted">{{ballots[ballots.length - i].added | date: "dd.MM.yyyy H:mm:ss"}}</span>
+				<span ng-show="ballots[ballots.length - i].editted">отредактировано {{ballots[ballots.length - i].editted | date: "dd.MM.yyyy H:mm:ss"}}</span>
+			</div>
+			
+
+
+	    	</div>
+	    </div>
+
+    </div>
+
+
+
+</body>
+</html>
