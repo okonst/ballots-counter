@@ -147,7 +147,7 @@ appCount.controller('countCtrl', function ($scope, $http, $location) {
 	// Загрузить из файла
 	$scope.loadData = function(){
 		$scope.candidates = [];
-		$http.get('js/candidates.js').success(function(data) {
+		$http.get('js/candidates.js' + '?t=' + Date.now()).success(function(data) {
 			console.log("Response: ", data);
 			data.forEach(function(item){
 				$scope.candidates.push(item);
@@ -155,7 +155,7 @@ appCount.controller('countCtrl', function ($scope, $http, $location) {
 
 		});
 		$scope.ballots = [];
-		$http.get('js/ballots.js').success(function(data) {
+		$http.get('js/ballots.js' + '?t=' + Date.now()).success(function(data) {
 			console.log("Response: ", data);
 			data.forEach(function(item){
 				$scope.ballots.push(item);
